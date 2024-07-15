@@ -1,0 +1,19 @@
+.game-figure {
+    border: 0.5px solid transparent;
+    transition: border 0.5s ease;
+}
+
+.blink-border {
+    animation: blink 3s linear infinite;
+}
+
+@keyframes blink {
+    0%, 12.5%, 50%, 62.5%, 100% {
+        border-color: transparent;
+        border-width: 0.5px;
+    }
+    25%, 75% {
+        border-color: rgb(255, 132, 0);
+        border-width: 3px;
+    }
+}

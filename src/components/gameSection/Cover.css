@@ -1,0 +1,19 @@
+  .cover-section{
+    left: 95px;
+  }
+
+  @media (max-height: 999px) {
+    .cover-section{
+      left: 95px;
+    }
+  }
+
+  .battle-cover-section{
+    left: 95px;
+  }
+
+  @media (max-height: 999px) {
+    .battle-cover-section{
+      left: 95px;
+    }
+  }

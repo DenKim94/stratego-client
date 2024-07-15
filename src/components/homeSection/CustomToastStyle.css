@@ -1,0 +1,6 @@
+.Toastify__toast--error {
+    border: 1px solid #EB5757;
+    border-radius: 20px !important;
+    background: #FAE1E2 !important;
+    font-family: 'Young Serif', serif;
+}

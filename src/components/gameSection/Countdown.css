@@ -1,0 +1,26 @@
+:root{
+  --paddingLeftCountdown_default: 145px;
+  --sizeCountdown_default: 140px;
+  --rightCountdown_media: 230px;
+  --paddingLeftCountdown_media: 70px;
+}
+
+
+.countdown-container{
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+    padding-left: var(--paddingLeftCountdown_default);
+    width: var(--sizeCountdown_default);
+    height: var(--sizeCountdown_default);
+    font-family: 'Cinzel, serif';
+}
+
+  /* *** If the viewport height is equal or lower than 999 px *** */
+  @media (max-height: 999px) {
+    .countdown-container { 
+        right: var(--rightCountdown_media);
+        padding-left: var(--paddingLeftCountdown_media);
+    }
+  }

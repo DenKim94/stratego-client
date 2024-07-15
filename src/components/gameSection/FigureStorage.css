@@ -1,0 +1,51 @@
+:root{
+  --maxHeightFigureStorage_default: 150px;
+  --minHeightFigureStorage_default: 50px;
+  --widthFigureStorage_default: 650px;
+  --gapFigureStorage_default: 5px;
+  --marginTopFigureStorage_default: 20px;
+  --borderRadiusFigureStorage_default: 5px;
+  --maxHeightFigureStorage_media: 400px;
+  --widthFigureStorage_media: 250px;
+  --marginTopFigureStorage_media: 300px;
+  --marginLeftFigureStorage_media: 20px;
+  --borderPropsFigureStorage: 1px solid black;
+  --backGroundColorFigureStorage_default:  lightgoldenrodyellow;
+}
+
+/* *** Responsive Design of 'FigureStorage' *** */
+.figure-storage {
+    max-height: var(--maxHeightFigureStorage_default);
+    min-height: var(--minHeightFigureStorage_default);
+    overflow-y: auto; 
+    width: var(--widthFigureStorage_default);
+    justify-content: center;
+    gap: var(--gapFigureStorage_default);
+    align-items: center;
+    margin-top: var(--marginTopFigureStorage_default);
+    border: var(--borderPropsFigureStorage);
+    background-color: var(--backGroundColorFigureStorage_default);
+    border-radius: var(--borderRadiusFigureStorage_default);
+  } 
+
+  .scrollspy-example{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: var(--gapFigureStorage_default);
+    border-radius: var(--borderRadiusFigureStorage_default);
+  } 
+
+  /* *** If the viewport height is equal or lower than 999 px *** */
+  @media (max-height: 999px) {
+    .figure-storage { 
+        position: relative;
+        max-height: var(--maxHeightFigureStorage_media);
+        overflow-y: auto; 
+        width: var(--widthFigureStorage_media);
+        margin-top: var(--marginTopFigureStorage_media);
+        margin-left: var(--marginLeftFigureStorage_media);
+        border: var(--borderPropsFigureStorage);
+    }
+  }
+  

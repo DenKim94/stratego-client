@@ -1,0 +1,14 @@
+/* If the height of the viewport is lower/equal 999 px */
+@media (min-height: 999px) {
+  .dnd-container {
+    flex-direction: column; 
+  }
+
+  .game-field-container {
+    order: 1; /* Order of the main component */
+  }
+
+  .figure-storage {
+    order: 2; /* Order of the subcomponent */
+  }
+}
