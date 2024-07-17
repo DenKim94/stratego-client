@@ -41,7 +41,8 @@ const SetUp = ({ setToken,
     const { setItem, getItem, clearLocalStorage } = useLocalStorage();
 
     const navigate = useNavigate();
-    const SETUPURL = process.env.REACT_APP_SETUP_URL;
+    // const SETUPURL = process.env.REACT_APP_SETUP_URL || "http://localhost:3001/setup";
+    const SETUPURL = "https://stratego-server-tykz.onrender.com/setup";
 
     // Get stored states from local storage in case of page reload                
     useEffect(() => {

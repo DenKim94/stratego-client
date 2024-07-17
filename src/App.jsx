@@ -24,7 +24,7 @@ import { useLocalStorage } from './components/functions/useLocalStorage';
  * 
  * - Developer: D.Kim 
  * - Version: 1.0.0 
- * - Date of last changes: 04.07.2024
+ * - Date of last changes: 17.07.2024
 */
 // *******************************************************************  
 const App = () => {
