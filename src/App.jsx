@@ -42,13 +42,9 @@ const App = () => {
     // Get stored states from local storage in case of page reload
     useEffect(() => {
         const storedUserConnected = getItem('userConnected');
-        const storedUserCreated = getItem('userCreated');
 
         if(storedUserConnected !== null){
             setUserConnected(storedUserConnected)
-        } 
-        if(storedUserCreated !== null){
-            setUserCreated(storedUserCreated)
         } 
         // eslint-disable-next-line
     }, [])

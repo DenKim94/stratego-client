@@ -4,7 +4,6 @@ import CoverContent from './CoverContent.jsx'
 import { useButtonStates } from '../context/ButtonStatesContext.js';
 import { useGameStates } from '../context/GameStatesContext.js';
 import { useOpponentStates } from '../context/OpponentStatesContext.js';
-import { useLocalStorage } from '../functions/useLocalStorage.js';
 import './Cover.css'
 import ExitBox from './ExitBox.jsx';
 
@@ -14,29 +13,9 @@ import ExitBox from './ExitBox.jsx';
  */
 const Cover = ({ styleCover = parameters.styleCover }) => {
   
-const { buttonStates, setButtonStates } = useButtonStates();
+const { buttonStates } = useButtonStates();
 const { gameStates, setGameStates } = useGameStates();
-const { opponentStates, setOpponentStates } = useOpponentStates();
-const { getItem } = useLocalStorage();
-
-    // Get stored states from local storage in case of page reload                
-    useEffect(() => {
-      const storedGameState     = getItem('game-states');
-      const storedOpponentState = getItem('opponent-states');
-      const storedButtonStates  = getItem('button-states') 
-
-      if(storedGameState !== null){
-          setGameStates(storedGameState)
-      } 
-      if(storedOpponentState !== null){
-          setOpponentStates(storedOpponentState)
-      }         
-      if(storedButtonStates !== null){
-          setButtonStates(storedButtonStates)
-      } 
-
-      // eslint-disable-next-line
-  }, [])
+const { opponentStates } = useOpponentStates();
 
   useEffect(() => {
     const updateCoverState = () => {

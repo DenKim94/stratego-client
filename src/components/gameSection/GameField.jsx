@@ -13,7 +13,6 @@ import { useScoutStates } from '../context/ScoutStatesContext.js';
 import { useOpponentStates } from '../context/OpponentStatesContext.js';
 import { useChannelStates } from '../context/ChannelStatesContext.js';
 import { useChatContext } from 'stream-chat-react';
-import { useLocalStorage } from '../functions/useLocalStorage.js';
 import { figProperties } from '../../game-logic/parameters.js';
 import * as helperFcn from '../functions/helperFunctions.js'
 import * as gameLogic from '../../game-logic/gameLogic.js'
@@ -38,7 +37,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
     const { channelStates } = useChannelStates();
     const { client } = useChatContext();
     const { gameStates, setGameStates } = useGameStates();
-    const { setItem, getItem } = useLocalStorage();
 
     // States to provide updates of moved figures to each player
     const [movedFigure, setMovedFigure] = useState( 
@@ -80,9 +78,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
           }
           setCounterFirstTurn(counterFirstTurn+1)
       } 
-      // Save states in local storage
-      setItem('counterFirstTurn', counterFirstTurn)
-      setItem('firstTurn', firstTurn)
 
     // eslint-disable-next-line  
     },[opponentStates.ready2Play, gameStates.ready2Play, gameStates.isPlayer1, counterFirstTurn])
@@ -179,35 +174,12 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
     // State of added figures on field due to the opponent
     const [addedOpponentFieldState, setAddedOpponentFieldState] = useState([]);
 
-   // Get stored states from local storage in case of page reload    
-   useEffect(() => {
-
-    const setterFunctions = [ 
-        setGameStates, setOpponentStates, setBattledFigures, setButtonStates ,setScoutStates,
-        setMovedFigure, setTurnPlayer, setAddedOpponentFieldState, setGameFieldState, setCounterFirstTurn,
-        setDefeatedFigureStorage, setFigureStorageState
-        ];
-      const itemIDs = [
-        'game-states', 'opponent-states', 'battled-figures', 'button-states', 'scout-states',
-        'moved-figure', 'turn-player', 'added-opponent-on-field', 'game-field-state',
-        'counter-first-turn', 'defeated-figure-storage', 'figure-storage'
-        ];
-
-      setterFunctions.forEach((func, index) => {
-          const item = getItem(itemIDs[index]);
-          if(item !== null){ func(item) }      
-        })
-
-      // eslint-disable-next-line
-    }, [])  
-
     // Send updates to channel
     useEffect(() => {
       const provideUpdatesToChannel = async (gameFieldStates, movedFigure, battledFigures) => 
       {   
         try{
           gameLogic.addPathFigureBack(movedFigure.figureProps);
-          setItem('moved-figure', movedFigure)
 
           if(!turnPlayer){ 
             const providedGameFieldState = gameFieldStates.filter((props) => props.id === movedFigure.destination.droppableId);
@@ -232,8 +204,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
               })
             }
           }
-          setItem('turn-player', turnPlayer)
-          setItem('game-states', gameStates)
 
         }catch(error){
           console.error(error.message);
@@ -251,7 +221,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
             destination: null,
           }));
       } 
-    setItem('moved-figure', movedFigure)
 
     // eslint-disable-next-line
     }, [movedFigure.figureProps, movedFigure.isValidTurn, playerNumber, battledFigures, turnPlayer, channelStates.channelObj])
@@ -301,7 +270,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
 
                   if(event.data.battledFigures.defeatedFigProps.color !== playerColor){ 
                     addDefeatedFigure(event.data.battledFigures.defeatedFigProps)
-                    setItem('defeated-figure-storage', defeatedFigureStorage)
                   }
 
                 }else if(event.data.battledFigures.winnerFigProps !== null && 
@@ -326,7 +294,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
                   });
                   
                   addDefeatedFigure(event.data.battledFigures.defeatedFigProps)
-                  setItem('defeated-figure-storage', defeatedFigureStorage)
                 }else{
                     setGameFieldState((prevStates) => {
                     const updatedState = [...prevStates];
@@ -352,13 +319,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
                   winnerFigProps: event.data.battledFigures.winnerFigProps,
                   defeatedFigProps: event.data.battledFigures.defeatedFigProps,
                 }));
-
-                setItem('turn-player', turnPlayer)
-                setItem('game-states', gameStates)
-                setItem('game-field-state', gameFieldState)
-                setItem('opponent-states', opponentStates)
-                setItem('battled-figures', battledFigures)
-
                 break;
 
             case "set-up-figures":
@@ -366,7 +326,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
                 const opponentFieldState = gameLogic.trackOpponentFieldStateUpdates(addedOpponentFieldState, providedFieldState);
                 
                 setAddedOpponentFieldState(opponentFieldState)
-                setItem('added-opponent-on-field', addedOpponentFieldState)
                 break;
 
             default:       
@@ -402,11 +361,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
 
         // Update 'gameFieldState' to render hidden opponent and own game figures
         setGameFieldState(mergedSetUpFieldState)
-
-        setItem('turn-player', turnPlayer)
-        setItem('game-states', gameStates)
-        setItem('button-states', buttonStates)
-        setItem('game-field-state', gameFieldState)
       }
 
       // eslint-disable-next-line
@@ -424,7 +378,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
               ...prevStates,
               disabledStartButton: false,
             }));
-            setItem('button-states', buttonStates)
         }
       }; 
 
@@ -452,7 +405,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
           sourcePosition: figureProps.sourcePosition,
           targetPosition: targetFieldPosition,       
         }))
-        setItem('scout-states', scoutStates)
       }
       // Check if the move made by the figure 'Scout' is valid and update state
       if(figureProps.sourcePosition && targetFieldPosition && gameStates.ready2Play){
@@ -465,8 +417,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
           ...prevStates,
           isValidMove: isValidMove,
         })); 
-        
-        setItem('scout-states', scoutStates)
       }   
     }
 
@@ -484,7 +434,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
                                       targetPosition: null,       
                                       isValidMove: true,
                                     }))  
-                                    setItem('scout-states', scoutStates)
                                     return null                           
                                   }        
                                   
@@ -508,7 +457,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
                                       if(isDraw){ 
                                         draggedFigure.isActive = false; 
                                         addDefeatedFigure(defeatedFigure)
-                                        setItem('defeated-figure-storage', defeatedFigureStorage)
                                       }
                                                                                                         
                                       if(winnerFigure !== null){
@@ -533,12 +481,7 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
                                         
                                         if(defeatedFigure.color !== playerColor){ 
                                           addDefeatedFigure(defeatedFigure)
-                                          setItem('defeated-figure-storage', defeatedFigureStorage)
                                         } 
-
-                                        setItem('game-states', gameStates)
-                                        setItem('moved-figure', movedFigure)
-                                        setItem('opponent-states', opponentStates)
                                       }
                                       else{
                                         setMovedFigure((prevStates) => ({
@@ -556,16 +499,11 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
                                         winnerFigProps: winnerFigure,
                                         defeatedFigProps: defeatedFigure,
                                       })) 
-                                      setItem('moved-figure', movedFigure)
-                                      setItem('battled-figures', battledFigures)  
 
                                     }else{ return null } 
 
                                     setGameFieldState(newGameFieldState);         // Update the State of the game field 
                                     setFigureStorageState(newFigureStorageState); // Update the State of the figure storage
-
-                                    setItem('game-field-state', gameFieldState)
-                                    setItem('figure-storage', figureStorageState)
                                   }
                                   else{ return null }                             
                                 }}>

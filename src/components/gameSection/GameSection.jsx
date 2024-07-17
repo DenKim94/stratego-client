@@ -26,34 +26,11 @@ const GameSection = () => {
     const { gameStates, setGameStates } = useGameStates();
     const { opponentStates, setOpponentStates } = useOpponentStates();
     const { client } = useChatContext();
-    const { setItem, getItem } = useLocalStorage();
+    const { getItem } = useLocalStorage();
     const [stateIsUpdated, setStateIsUpdated] = useState(false);
 
     const cookies = useMemo(() => new Cookies(), []);
     const navigate = useNavigate();
-
-    // Get stored states from local storage in case of page reload                
-    useEffect(() => {
-        const storedGameState     = getItem('game-states');
-        const storedOpponentState = getItem('opponent-states');
-        const storedIsUpdated     = getItem('state-isUpdated');
-        const storedButtonStates  = getItem('button-states') 
-        
-        if(storedGameState !== null){
-            setGameStates(storedGameState)
-        } 
-        if(storedOpponentState !== null){
-            setOpponentStates(storedOpponentState)
-        }         
-        if(storedIsUpdated !== null){
-            setStateIsUpdated(storedIsUpdated)
-        } 
-        if(storedButtonStates !== null){
-            setButtonStates(storedButtonStates)
-        } 
-
-        // eslint-disable-next-line
-    }, [])
 
     // Update states between both players
     useEffect(() => {
@@ -88,9 +65,7 @@ const GameSection = () => {
             setGameStates((prevStates) => ({
                 ...prevStates,
                 ready2Play: false,
-            }));   
-            // Save states in local storage
-            setItem('game-states', gameStates)                   
+            }));                  
         }
 
         if(gameStates.exitConfirmed){
@@ -117,8 +92,6 @@ const GameSection = () => {
                 }
             }
         })       
-        setItem('state-isUpdated', stateIsUpdated)
-        setItem('opponent-states', opponentStates)
 
     }catch(error){ 
         console.error(error.message);   
@@ -171,11 +144,6 @@ const GameSection = () => {
         })); 
 
         setStateIsUpdated(false);
-
-        // Save states in local storage
-        setItem('button-states', buttonStates)
-        setItem('game-states', gameStates)
-        setItem('state-isUpdated', stateIsUpdated)
     }
     /**
      * Function to be executed when the "Pause/Proceed Game" button is clicked.
@@ -198,7 +166,6 @@ const GameSection = () => {
             })); 
             
             setStateIsUpdated(false);
-            setItem('state-isUpdated', stateIsUpdated)
         }
         else{
             // After proceeding the game, change the button text of 'Proceed Game' to 'Pause Game'
@@ -213,10 +180,6 @@ const GameSection = () => {
                 isPaused: false, 
             }));             
         }
-
-        // Save states in local storage
-        setItem('button-states', buttonStates)
-        setItem('game-states', gameStates)
     }
 
     /**
@@ -232,9 +195,6 @@ const GameSection = () => {
             leaveGame: true,       
         }));     
         setStateIsUpdated(false)
-
-        // Save states in local storage
-        setItem('button-states', buttonStates)
     }
 
     /**
@@ -254,8 +214,6 @@ const GameSection = () => {
         
         if(!buttonStates.disabledStartButton){
             disableStartButton()
-            // Save states in local storage
-            setItem('button-states', buttonStates)
         }
     // eslint-disable-next-line
     }, [buttonStates.counterUsedStartButton, buttonStates.disabledStartButton])

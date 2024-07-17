@@ -42,7 +42,7 @@ const SetUp = ({ setToken,
 
     const navigate = useNavigate();
     // const SETUPURL = process.env.REACT_APP_SETUP_URL || "http://localhost:3001/setup";
-    const SETUPURL = "https://stratego-server-tykz.onrender.com/setup";
+    const SETUPURL = "https://stratego-server-tykz.onrender.com/setup" || "http://localhost:3001/setup";
 
     // Get stored states from local storage in case of page reload                
     useEffect(() => {
@@ -102,10 +102,7 @@ const SetUp = ({ setToken,
         }else if(!gameStates.isPlayer1 && gameStates.opponentName.length > parameters.genCfg.minInputLength){
             setReadyToStart(true)
         }
-        // Save states in local storage
-        setItem('game-states', gameStates)
-        setItem('userCreated', userCreated)
-
+        
         // eslint-disable-next-line
     },[gameStates, setReadyToStart, userCreated, setUserCreated, SETUPURL, cookies, setToken])
 
