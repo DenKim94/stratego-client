@@ -91,12 +91,12 @@ const App = () => {
         return(
             <Router>
                 <div className = "App"> 
-                    <GameLogo/> 
                     <ButtonStatesProvider>
                         <GameStatesProvider>  
                             <ChannelStatesProvider>
                                 <OpponentStatesProvider> 
-                                    <Chat client={client}>              
+                                    <Chat client={client}>  
+                                        <GameLogo/>            
                                         <Routes>
                                             <Route path = "/" element={ <HomeSection /> }/>
                                             <Route path = "/setUp/*" element={ <SetUp setToken = {setTokenRef} 
