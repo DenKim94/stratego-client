@@ -82,7 +82,8 @@ const HomeSection = ({ homeSectionProps = parameters.homeSectionProps }) => {
 
     return(
         <div style={homeSectionProps.style}>
-            <input  
+            <input 
+                id = 'inputPlayerName' 
                 style = {{
                     border: isInfoVisible ? '2px solid yellow' : '1px solid black',
                     ...homeSectionProps.inputStyle,
@@ -94,7 +95,7 @@ const HomeSection = ({ homeSectionProps = parameters.homeSectionProps }) => {
                    onChange = {handleChangedPlayerName}/>
 
             {isInfoVisible && (
-                <p style={{ fontSize: '15px', color: 'yellow' }}>
+                <p id = 'infoPlayerName' style={{ fontSize: '15px', color: 'yellow' }}>
                     Please notice that the user name should have at least {parameters.genCfg.minInputLength} and less than {parameters.genCfg.maxInputLength} characters. 
                 </p>
             )}    
