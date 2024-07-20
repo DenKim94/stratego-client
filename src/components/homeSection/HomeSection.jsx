@@ -37,7 +37,7 @@ const HomeSection = ({ homeSectionProps = parameters.homeSectionProps }) => {
         const ensureValidInputLength = () => {
             const userName = gameStates.playerName; 
             if(userName){
-                if(userName.length < parameters.genCfg.minInputLength || userName.length > parameters.genCfg.maxInputLength){
+                if(userName.length < parameters.genCfg.minInputLength || userName.length >= parameters.genCfg.maxInputLength){
                     setInfoVisible(true)
                     setIsValid(false)
                 }
