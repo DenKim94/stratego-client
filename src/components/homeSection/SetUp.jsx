@@ -231,7 +231,8 @@ const SetUp = ({ setToken,
                 ) : (
                     // Rendered section if channel is not established
                     <>
-                        <p style={{ fontSize: '15px', 
+                        <p  id = 'welcomeText'
+                            style = {{ fontSize: '15px', 
                             color: 'rgb(248, 202, 45)', 
                             textAlign: 'center',
                             marginBottom: "20px"}}>

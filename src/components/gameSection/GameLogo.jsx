@@ -71,7 +71,6 @@ const GameLogo = () => {
     navigate('/');      
   };
 
-
   return (
     <div className="game-logo" style = {styleGameLogo} onClick={handleClick}>
       <h1 style = {{fontSize: styleGameLogo.fontSize, cursor: 'pointer'}} >Stratego</h1>
