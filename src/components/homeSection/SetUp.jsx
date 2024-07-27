@@ -46,12 +46,8 @@ const SetUp = ({ setToken,
 
     // Get stored states from local storage in case of page reload                
     useEffect(() => {
-        const storedGameState = getItem('game-states');
         const storedUserCreated = getItem('userCreated');
-
-        if(storedGameState !== null){
-            setGameStates(storedGameState)
-        } 
+        
         if(storedUserCreated !== null){
             setUserCreated(storedUserCreated)
         } 
@@ -242,6 +238,7 @@ const SetUp = ({ setToken,
                         </p>                    
                         <div className='game-settings' style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                             <input
+                                id='inputOpponentName'
                                 style={setUpProps.inputStyle}
                                 type='string'
                                 placeholder="Name of opponent"
