@@ -444,11 +444,14 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
                                     return null
                                   }
                                   
-                                  // Drag and Drop logic                     
+                                  if(opponentStates.leaveGame){
+                                    return null
+                                  }  
+                 
                                   const updatedStates = gameLogic.handleDragDrop(result, gameFieldState, figureStorageState, prefixSingleFieldID, gameStates);
                                 
                                   if(updatedStates !== null && !opponentStates.pausedGame){                                  
-                                    // Get updated states from 'updatedStates'
+
                                     const { draggedFigure, gameFieldState: newGameFieldState, figureStorageState: newFigureStorageState, winnerFigure, defeatedFigure, isValidTurn} = updatedStates;
                                     
                                     if(draggedFigure){
