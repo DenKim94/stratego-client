@@ -68,17 +68,17 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
         }else{
           setFirstTurn(1);
         }
-  
+        setCounterFirstTurn(counterFirstTurn+1)
+
       }else if(!opponentStates.ready2Play && gameStates.ready2Play && counterFirstTurn === 0){    
           if(gameStates.isPlayer1){
             setFirstTurn(1);
           }else{
             setFirstTurn(2);
           }
-
+          setCounterFirstTurn(counterFirstTurn+1)
       } 
-      setCounterFirstTurn(counterFirstTurn+1)
-
+      
     // eslint-disable-next-line  
     },[opponentStates.ready2Play, gameStates.ready2Play, gameStates.isPlayer1, counterFirstTurn])
 
