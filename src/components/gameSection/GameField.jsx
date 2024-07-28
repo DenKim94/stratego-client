@@ -444,7 +444,7 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
                                     return null
                                   }
                                   
-                                  if(opponentStates.leaveGame){
+                                  if(opponentStates.exitConfirmed){
                                     return null
                                   }  
                  
