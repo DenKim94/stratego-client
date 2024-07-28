@@ -68,7 +68,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
         }else{
           setFirstTurn(1);
         }
-        setCounterFirstTurn(counterFirstTurn+1)
   
       }else if(!opponentStates.ready2Play && gameStates.ready2Play && counterFirstTurn === 0){    
           if(gameStates.isPlayer1){
@@ -76,8 +75,9 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
           }else{
             setFirstTurn(2);
           }
-          setCounterFirstTurn(counterFirstTurn+1)
+
       } 
+      setCounterFirstTurn(counterFirstTurn+1)
 
     // eslint-disable-next-line  
     },[opponentStates.ready2Play, gameStates.ready2Play, gameStates.isPlayer1, counterFirstTurn])
@@ -170,7 +170,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
         }
       });
     };
-
     // State of added figures on field due to the opponent
     const [addedOpponentFieldState, setAddedOpponentFieldState] = useState([]);
 
@@ -263,8 +262,7 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
                       ...updatedState[indexTargetField],
                       figure: movedOpponentFigure.figureProps,
                       isPlayable: false,
-                    };
-                  
+                    };                  
                     return updatedState;
                   });
 
@@ -289,7 +287,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
                       figure: null,
                       isPlayable: true,
                     };
-                  
                     return updatedState;
                   });
                   
@@ -309,7 +306,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
                       figure: movedOpponentFigure.figureProps,
                       isPlayable: false,
                     };
-                  
                     return updatedState;
                     });
                 }
@@ -324,7 +320,6 @@ function GameField({ gameFieldSettings = parameters.gameFieldObj })
             case "set-up-figures":
                 const providedFieldState = event.data.providedFieldState;
                 const opponentFieldState = gameLogic.trackOpponentFieldStateUpdates(addedOpponentFieldState, providedFieldState);
-                
                 setAddedOpponentFieldState(opponentFieldState)
                 break;
 
