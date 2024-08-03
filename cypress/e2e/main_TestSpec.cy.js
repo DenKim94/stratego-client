@@ -5,7 +5,7 @@ describe('Run main_TestSpec', () => {
     cy.visit('/');
   });
 
-  // tc.run_Req01_testCase()
-  // tc.run_Req02_testCase()
+  tc.run_Req01_testCase()
+  tc.run_Req02_testCase()
   tc.run_Req03_testCase()
 });
