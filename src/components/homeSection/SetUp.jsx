@@ -287,7 +287,7 @@ const SetUp = ({ setToken,
                                     {parameters.instructionsProps.linkName}
                                 </a>
                             </div> 
-                            <ToastContainer position='top-right' />
+                            <ToastContainer position='top-right' className={'toast-container-setup'}/>
                         </div>
                     </>
                 )}          

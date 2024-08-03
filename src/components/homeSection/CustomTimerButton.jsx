@@ -34,7 +34,7 @@ const CustomTimerButton = () => {
         title={'Set time limit per turn'}
         onSelect={handleTimeSelection}
         >
-            <Dropdown.Item eventKey='15'>
+            <Dropdown.Item eventKey="15">
                 <div>
                     <p style={itemStyle}> 15 sec. </p>
                 </div>

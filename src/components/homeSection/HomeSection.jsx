@@ -103,7 +103,10 @@ const HomeSection = ({ homeSectionProps = parameters.homeSectionProps }) => {
             <Button buttonName = {"Join Game"} isDisabled = {isValid ? false : true} onCklickFunction = {joinGame}/>  
 
             <div style={parameters.instructionsProps.styleDiv}>
-                <a href="/instructions.html" target="_blank" rel="noopener noreferrer" style={parameters.instructionsProps.styleLink}>
+                <a href="/instructions.html" 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                style={parameters.instructionsProps.styleLink}>
                     {parameters.instructionsProps.linkName}
                 </a>
             </div>             

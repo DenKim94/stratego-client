@@ -1,6 +1,11 @@
 export const paramSet_generic = {
     selectorInputPlayerName: 'input[id="inputPlayerName"]',
     selectorButton: 'button[id="#highlighted-button"]',
+    waitTime_ms: 1000,
+    localStorage:{
+        paramName_bool: "userConnected",
+        expectedParamValue: false,
+    },
 };
 
 export const paramSet_Req01 = {
@@ -14,7 +19,6 @@ export const paramSet_Req01 = {
 
 export const paramSet_Req02 = {
     validPlayerName: 'Rocket',
-    validOpponentName: 'Groot',
     selectorWelcomeText: 'p[id="welcomeText"]',
     selectorInputOpponentName: 'input[id="inputOpponentName"]',
     placeholderOpponentName: 'Name of opponent',
@@ -25,11 +29,18 @@ export const paramSet_Req02 = {
     expectedStartButtonName: 'Start Game', 
     expectedCancelButtonName: 'Cancel', 
     buttonNameNewGame: 'Create New Game',
-    buttonNameJoinGame: 'Join Game',
     SetUp_URL: "https://stratego-server-tykz.onrender.com/setup" || "http://localhost:3001/setup", 
     expectedURL: 'http://localhost:3000/setUp',
+    selectorInstictionsLink: 'a[href*="instructions"]', 
 };
 
 export const paramSet_Req03 = {
-  
+    validPlayerName: 'Obelix',
+    validOpponentName: 'Asterix',    
+    buttonNameJoinGame: 'Join Game',
+    colorPlayer1: 'Red',
+    colorPlayer2: 'Blue',
+    valueTimer_s: "15",
+    selectorPopUp: '.toast-container-setup',
+    expectedPopUpMessage: "Opponent not found! Please try again!",
 }
