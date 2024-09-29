@@ -1,7 +1,7 @@
 /** Main file for setting parameters [developer file]
  * This file is mandatory to run the application 
  * - Developer: D.Kim
- * - Date of last changes: 20.06.2024  
+ * - Date of last changes: 29.09.2024  
 */
 
 /**** General/Global Configurations ****/
@@ -13,6 +13,7 @@ export const genCfg = {
     timeOutErrorHandling_ms: 3500,  
     timeOutBattle_ms: 7000,   
     timeOutBlinkBorder_ms: 3000,    // Time in ms for the blink duration of winner figure after a battle (consider to update the settings in GameFigure.css as well --> same durations)      
+    SETUP_URL: "https://stratego-server-tykz.onrender.com/setup", // URL of deployed or local backend server
 };
 
 /**** Settings for GameSection-Component: GameField ****/

@@ -378,32 +378,29 @@ export async function disconnectUser(clientObj) {
         await clientObj.disconnectUser();
         console.log(">> User disconnected.") 
 
+        return [clientObj]
+
     } catch (error) {
         console.error(error.message);
     }
-
-    return [clientObj]
 }
 
 /** 
  * Function to delete all saved cookies
  * 
 */
-export function deleteCookies(cookiesObj){
+export function deleteCookies(cookiesObj) {
     try {
-        const allCookies = cookiesObj.getAll();
-        const cookieNames = Object.keys(allCookies);
+        Object.keys(cookiesObj.getAll()).forEach(
+            (cookieName) => cookiesObj.remove(cookieName, { path: '/' })
+        );
+        console.log(">> Saved cookies removed.")  
 
-        cookieNames.forEach(cookieName => {
-            cookiesObj.remove(cookieName, { path: '/' });
-          });
-          console.log(">> Saved cookies removed.")  
+        return [cookiesObj];
 
-    } catch(error) {
+    } catch (error) {
         console.error(error.message);
     }
-
-    return [cookiesObj]
 }
 
 /**
@@ -416,18 +413,21 @@ export function deleteCookies(cookiesObj){
  *                  - The number of the current player (1 or 2).
  */
 export function getColorAndNumberOfCurrentPlayer(isPlayer1, colorPlayer1, colorPlayer2){
-    
     let playerColor; 
     let playerNumber;
+    
+    try{
+        if(isPlayer1){
+            playerColor  = colorPlayer1;
+            playerNumber = 1;
+        }
+        else{
+            playerColor  = colorPlayer2;
+            playerNumber = 2;
+        }  
+        return [playerColor, playerNumber];
 
-    if(isPlayer1){
-        playerColor  = colorPlayer1;
-        playerNumber = 1;
+    }catch(error){
+        console.error(error.message);
     }
-    else{
-        playerColor  = colorPlayer2;
-        playerNumber = 2;
-    }  
-      
-    return [playerColor, playerNumber];
 }

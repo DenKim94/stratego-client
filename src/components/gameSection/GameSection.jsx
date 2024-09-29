@@ -100,10 +100,8 @@ const GameSection = () => {
     // Restore established channel in case of reloaded page
     useEffect(() => {
         const storedChannelID = getItem('channel-id');
-
         if(storedChannelID !== null && !client.userID){
             console.log(">> [@GameSection]: reconnect... ")
-
             restoreChannel(client, cookies, storedChannelID)
             .then((channel) => {
               if (channel) {

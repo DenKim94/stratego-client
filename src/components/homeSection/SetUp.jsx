@@ -15,7 +15,7 @@ import * as helperFcn from '../functions/helperFunctions.js'
 import { useGameStates } from '../context/GameStatesContext.js';
 import { useChannelStates } from '../context/ChannelStatesContext.js';
 import { useLocalStorage } from '../functions/useLocalStorage.js';
-import { restoreChannel } from '../functions/restoreChannel.js';
+import { restoreChannel, connectUser } from '../functions/restoreChannel.js';
 
 /**
  * React component responsible for managing the setup phase before the game starts.
@@ -27,27 +27,23 @@ import { restoreChannel } from '../functions/restoreChannel.js';
  * @param {Object} setUpProps - Additional setup properties (default to parameters.setUpProps)
  * @param {Object} setUpProps.style - Custom styles for the component.
  */
-const SetUp = ({ setToken,
-                 userCreated, 
-                 setUserCreated, 
-                 setUserConnected,
-                 setUpProps = parameters.setUpProps}) => {
+const SetUp = ({ setUpProps = parameters.setUpProps}) => {
 
     const { client } = useChatContext();
     const cookies = useMemo(() => new Cookies(), []);
     const { gameStates, setGameStates } = useGameStates();
     const [isReadyToStart, setReadyToStart] = useState(false);
+    const [userCreated, setUserCreated]     = useState(false);
     const { channelStates, setChannelStates } = useChannelStates();
     const { setItem, getItem, clearLocalStorage } = useLocalStorage();
-
     const navigate = useNavigate();
-    // Use the url of deployed backend server or local server
-    const SETUPURL = "https://stratego-server-tykz.onrender.com/setup" || "http://localhost:3001/setup";
+
+    // Use the url of deployed backend server or local server    
+    const SETUPURL = parameters.genCfg.SETUP_URL;
 
     // Get stored states from local storage in case of page reload                
     useEffect(() => {
         const storedUserCreated = getItem('userCreated');
-        
         if(storedUserCreated !== null){
             setUserCreated(storedUserCreated)
         } 
@@ -56,25 +52,22 @@ const SetUp = ({ setToken,
 
     useEffect(() => {
         const setUserProps = async () => {
-
             try {
-                // Get data from backend
                 const res = await axios.post(SETUPURL, { gameStates });
                 const { userProps, token } = res.data;
                     
-                // Setting cookies
                 cookies.set("token", token);              
                 cookies.set("userID", userProps.userID);
                 cookies.set("playerName", userProps.playerName);
                 cookies.set("playerNumber", userProps.playerNumber);
-                setToken(token);
-
+                setUserCreated(true)
+                
             }catch(error){
                 console.error(error.message);
 
                 // Error Handling
                 toast.error("Network error, please try again!", {
-                    autoClose: parameters.genCfg.timeOutAutoClose_ms, // Optional: Timeout for closing the pop-up
+                    autoClose: parameters.genCfg.timeOutAutoClose_ms,
                   });
 
                 // Timeout for closing navigate back to the home section
@@ -82,10 +75,9 @@ const SetUp = ({ setToken,
                     navigate("/");
                 }, parameters.genCfg.timeOutErrorHandling_ms);
             }
-
-            setUserCreated(true)
         }
-        // Get user properties to set cookies 
+
+        // Ensure user is created
         if(!userCreated){
             setUserProps() 
         }
@@ -100,8 +92,17 @@ const SetUp = ({ setToken,
         }
         
         // eslint-disable-next-line
-    },[gameStates, setReadyToStart, userCreated, setUserCreated, SETUPURL, cookies, setToken])
+    },[gameStates, setReadyToStart, userCreated, setUserCreated, SETUPURL, cookies])
 
+    useEffect(() => {
+        if (userCreated) {
+          connectUser(client, cookies).then(userConnected => {
+            localStorage.setItem('userConnected', userConnected);
+            userConnected ? console.log(">> User is connected.") : console.error(">> User is not connected.");
+          });
+        }
+      }, [userCreated, client, cookies]);
+    
     // Store channel ID for reconnection in case of page reload
     useEffect(() => {
         if(channelStates.channelObj !== null){
@@ -110,23 +111,19 @@ const SetUp = ({ setToken,
         // eslint-disable-next-line
     }, [channelStates])
 
-    // Function to create a channel
     const createChannel = async () => {
         try{
             // Search user with defined opponent name
             const response = await client.queryUsers({name: { $eq: gameStates.opponentName }}); 
-        
             const foundUser = response.users.filter( props => 
                 props.online === true &&
                 props.playerNumber !== gameStates.playerNumber
             )
-
             // If opponent was not found by entered name
             if(foundUser.length === 0){
                 toast.info("Opponent not found! Please try again!", {
                     autoClose: parameters.genCfg.timeOutAutoClose_ms, // Optional: Timeout for closing the pop-up
-                }); 
-                            
+                });                          
                 return null
             }
 
@@ -136,41 +133,37 @@ const SetUp = ({ setToken,
                     members: [client.userID, foundUser[0].id],
                 });
 
-                await newChannel.watch() // Listening to the channel
+                await newChannel.watch()
 
                 setChannelStates((prevStates) => ({
                     ...prevStates,
                     channelObj: newChannel,
                 })) 
 
-                // Add cookie properties to the channel state
                 if(cookies.cookies){
                     setChannelStates((prevStates) => ({
                         ...prevStates,
                         cookieObj: cookies,
                     })) 
                 } 
-
                 // Put the channel ID to local storage
                 if(getItem('channelMember-id') === null){
                     setItem('channelMember-id', [client.userID, foundUser[0].id])
                 }                           
             }
         }catch(error){
-            // Error handling
-            toast.error("Network error, please cancel and try again!", {
+
+            toast.error("Network error, please try to reconnect again!", {
                 autoClose: parameters.genCfg.timeOutAutoClose_ms, 
               }); 
             console.error(error.message)
         }
     };
-
+   
     // Restore established channel in case of page reload
     useEffect(() => {
         const storedChannelID = getItem('channel-id');
         if(storedChannelID !== null){
-            console.log(">> [@SetUp]: reconnect ...")
-
             restoreChannel(client, cookies, storedChannelID)
             .then((channel) => {
               if (channel) {
@@ -188,7 +181,6 @@ const SetUp = ({ setToken,
     // eslint-disable-next-line
     }, [])
 
-    // Update the state with opponent name
     const handleChangedName = (event) => {
         const inputValue = event.target.value;
         setGameStates((prevStates) => ({
@@ -210,10 +202,9 @@ const SetUp = ({ setToken,
     // Handle cancel
     const handleCancel = async () => {
         const homePath = "/";
-
         clearLocalStorage()
         await helperFcn.disconnectUser(client); 
-        setUserConnected(false)
+        setItem('userConnected', false)
         setUserCreated(false)
         navigate(homePath);
     }
@@ -222,10 +213,8 @@ const SetUp = ({ setToken,
         <div style={setUpProps.style}>
             
                 {channelStates.channelObj ? (   
-                    // Rendered section if channel is established 
                     <WaitingRoom />
                 ) : (
-                    // Rendered section if channel is not established
                     <>
                         <p  id = 'welcomeText'
                             style = {{ fontSize: '15px', 

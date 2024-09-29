@@ -1,28 +1,4 @@
 /**
- * Initializes the client by connecting the user using the provided client and cookies objects.
- *
- * @async
- * @function
- * @param {Object} clientObj - The client object to initialize.
- * @param {Object} cookiesObj - The cookies object containing user information.
- * @returns {Promise<void>} A promise that resolves when the client is successfully initialized.
- * @throws Will throw an error if the client connection fails.
- */
-async function initClient(clientObj, cookiesObj) {
-    try{
-        const storedToken = cookiesObj.get("token");
-        await clientObj.connectUser({
-            id: cookiesObj.get("userID"),
-            name: cookiesObj.get("playerName"),
-            playerNumber: cookiesObj.get("playerNumber"),
-        }, storedToken);
-
-    }catch(error){
-        console.error(error.message)
-    }
-} 
-
-/**
  * Initializes a channel by either restoring an existing channel or returning null if no channel ID is provided.
  *
  * @async
@@ -38,6 +14,7 @@ async function initChannel(clientObj, channelID) {
     if(channelID){
         channel = clientObj.channel("messaging", channelID);
         await channel.watch();
+
     }else{
         channel = null;
     }
@@ -47,7 +24,6 @@ async function initChannel(clientObj, channelID) {
    
 /**
  * Restores a channel by first initializing the client and then initializing the channel.
- *
  * @async
  * @function
  * @param {Object} clientObj - The client object to initialize the channel with.
@@ -57,7 +33,31 @@ async function initChannel(clientObj, channelID) {
  * @throws Will throw an error if the client initialization or channel restoration fails.
  */
 export async function restoreChannel(clientObj, cookiesObj, channelID){
-    await initClient(clientObj,cookiesObj)
-    const channel = await initChannel(clientObj, channelID);
-    return channel;
+    if(connectUser(clientObj, cookiesObj)){
+        return await initChannel(clientObj, channelID)
+    }else{
+        return undefined
+    }
 }
+
+/**
+ * Connects the user to a channel by first initializing the client and then initializing the channel.
+ * @async
+ * @function
+ * @param {Object} clientObj - The client object to initialize the channel with.
+ * @param {Object} cookiesObj - The cookies object containing user information.
+ * @returns {Boolean} userConnected - A boolean value indicating whether the user was successfully connected to the channel.
+ */
+export async function connectUser(clientObj, cookiesObj) {
+    try {
+      const storedToken = cookiesObj.get("token");
+      return await clientObj.connectUser({
+                        id: cookiesObj.get("userID"),
+                        name: cookiesObj.get("playerName"),
+                        playerNumber: cookiesObj.get("playerNumber"),
+                    }, storedToken);
+    } catch (error) {
+        console.error("Error in connectUser: ", error.message);
+      return undefined;
+    }
+  }

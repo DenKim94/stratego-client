@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect }from 'react';
 import { styleGameLogo } from '../../game-logic/parameters.js';
 import { useGameStates } from '../context/GameStatesContext.js';
 import { useChannelStates } from '../context/ChannelStatesContext.js';
@@ -28,47 +28,42 @@ const GameLogo = () => {
     await helperFcn.disconnectUser(client);
   };
 
-  const sendGameStateUpdates = async (gameStates) => {
-    try{
-        await channelStates.channelObj.sendEvent({
-            type: "click-on-logo",
-            data: gameStates,
-        })           
-    }catch(error){
-        console.error(error.message);
-    }            
-  };
-
-  try{
-      channelStates.channelObj.on((event) => {
-          if(event.type === "click-on-logo" && event.user.id !== client.userID){        
-              // Update state to inform user that the opponent is waiting
-              setOpponentStates((prevStates) => ({
-                  ...prevStates,
-                  ready2Play: event.data.ready2Play,
-                  leaveGame: event.data.leaveGame,
-                  exitConfirmed: event.data.exitConfirmed,
-              }))
-          }
-      })       
-  }catch(error){ 
-      console.error(error.message);   
-  }
-
-  const handleClick = () => {
-    const updatedGameStates = {
-      ...gameStates,
-      ready2Play: false,
-      leaveGame: true,
-      exitConfirmed: true,
+  const sendGameStateUpdates = async (data) => channelStates.channelObj?.sendEvent({ type: "click-on-logo", data });
+  
+  useEffect(() => {
+    const handleOpponentLogoClick = (event) => {
+      if (event.type === "click-on-logo" && event.user.id !== client.userID) {
+        setOpponentStates((prevStates) => ({
+          ...prevStates,
+          ready2Play: event.data.ready2Play,
+          leaveGame: event.data.leaveGame,
+          exitConfirmed: event.data.exitConfirmed,
+        }));
+      }
     };
+    channelStates.channelObj?.on("click-on-logo", handleOpponentLogoClick);
 
-    setGameStates(updatedGameStates);
-    sendGameStateUpdates(updatedGameStates);   
+    return () => {
+      channelStates.channelObj?.off("click-on-logo", handleOpponentLogoClick);
+    };
+  }, [channelStates.channelObj, client.userID, setOpponentStates]);
 
-    checkoutUser()
-    clearLocalStorage()
-    navigate('/');      
+  const handleClick = () => {    
+    if(!channelStates.channelObj.disconnected){
+      const updatedGameStates = {
+        ...gameStates,
+        ready2Play: false,
+        leaveGame: true,
+        exitConfirmed: true,
+      };
+  
+      setGameStates(updatedGameStates);
+      sendGameStateUpdates(updatedGameStates);   
+  
+      checkoutUser()
+      clearLocalStorage()
+    }     
+    navigate('/'); 
   };
 
   return (
