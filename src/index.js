@@ -1,7 +1,7 @@
 /* 
  * Project-File of the application 'Stratego-Web' 
  * - Author: Denis Kim
- * - Version: 1.0.0 
+ * - Version: 1.1.0 
  */
 import React from 'react';
 import ReactDOM from 'react-dom/client';
