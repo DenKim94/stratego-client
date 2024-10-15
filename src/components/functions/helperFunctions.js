@@ -391,11 +391,13 @@ export async function disconnectUser(clientObj) {
 */
 export function deleteCookies(cookiesObj) {
     try {
-        Object.keys(cookiesObj.getAll()).forEach(
-            (cookieName) => cookiesObj.remove(cookieName, { path: '/' })
-        );
-        console.log(">> Saved cookies removed.")  
-
+        if (cookiesObj){
+            Object.keys(cookiesObj.getAll()).forEach(
+                (cookieName) => cookiesObj.remove(cookieName, { path: '/' })
+            );
+            console.log(">> Saved cookies removed.")  
+        }
+        
         return [cookiesObj];
 
     } catch (error) {

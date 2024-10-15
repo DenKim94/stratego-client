@@ -49,7 +49,8 @@ const GameLogo = () => {
   }, [channelStates.channelObj, client.userID, setOpponentStates]);
 
   const handleClick = () => {    
-    if(!channelStates.channelObj.disconnected){
+
+    if(channelStates &&!channelStates.channelObj?.disconnected){
       const updatedGameStates = {
         ...gameStates,
         ready2Play: false,
