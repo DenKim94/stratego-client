@@ -13,8 +13,7 @@ export const genCfg = {
     timeOutErrorHandling_ms: 3500,  
     timeOutBattle_ms: 7000,   
     timeOutBlinkBorder_ms: 3000,    // Time in ms for the blink duration of winner figure after a battle (consider to update the settings in GameFigure.css as well --> same durations)      
-    // SETUP_URL: "https://stratego-server-tykz.onrender.com/setup", // URL of deployed or local backend server
-    SETUP_URL: "http://localhost:3001/setup", // URL of deployed or local backend server
+    SETUP_URL: "https://stratego-server-tykz.onrender.com/setup", // URL of deployed or local backend server
 };
 
 /**** Settings for GameSection-Component: GameField ****/
