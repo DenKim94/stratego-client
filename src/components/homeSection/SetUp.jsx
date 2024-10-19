@@ -5,7 +5,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import Button from '../gameSection/Button.jsx'
 import { Oval } from 'react-loader-spinner';
-// import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import './CustomToastStyle.css'
 import axios from 'axios';
 import Cookies from 'universal-cookie'

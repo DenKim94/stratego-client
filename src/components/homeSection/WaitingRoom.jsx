@@ -6,6 +6,7 @@ import { useChatContext } from 'stream-chat-react';
 import { useGameStates } from '../context/GameStatesContext.js';
 import { useChannelStates } from '../context/ChannelStatesContext.js';
 import { useLocalStorage } from '../functions/useLocalStorage.js';
+import { Oval } from 'react-loader-spinner';
 
 /**
  * React component for waiting for both players to join the game and navigating them to the game section afterward.
@@ -103,7 +104,20 @@ const WaitingRoom = () => {
     return ( 
         <div>
             {!statesSynced ? ( 
-                <div> Waiting for the opponent... </div>
+                <div style={{ textAlign: 'center', marginTop: '20px', display: 'flex', flexDirection: 'column'}}>
+                    <div style={{ margin: 'auto' }}> 
+                        <Oval
+                            visible={true}
+                            height="80"
+                            width="80"
+                            color="#66cdaa"
+                            ariaLabel="oval-loading"
+                            wrapperStyle={{}}
+                            wrapperClass=""
+                        />
+                     </div>
+                    <p style={{ marginTop: '30px' }}> Waiting for the opponent... </p> 
+                </div>              
             ):(
                 null)
             }
