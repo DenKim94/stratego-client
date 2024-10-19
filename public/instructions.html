@@ -12,16 +12,25 @@
             overflow: hidden;
         }
 
-        iframe {
+        /* iframe {
             width: 100vw;
             height: 100vh;
             max-width: 100%;
             max-height: 100%;            
             border: none;
+        } */
+        object {
+            width: 100vw;
+            height: 100vh;
+            border: none;
         }
+
     </style>    
 </head>
 <body>
-    <iframe src="/documents/Stratego_Instructions.pdf"></iframe>
+    <!-- <iframe src="/documents/Stratego_Instructions.pdf"></iframe> -->
+    <object data="/documents/Stratego_Instructions.pdf" type="application/pdf">
+        <p> You don't have a PDF plugin for this browser. You can <a href="/documents/Stratego_Instructions.pdf">click here to download the PDF</a>.</p>
+    </object>
 </body>
 </html>
