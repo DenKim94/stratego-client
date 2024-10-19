@@ -7,7 +7,7 @@ The game is derived from the original board game 'Stratego Original'.
 
 Feel free to review my code/project and provide constructive feedback. 
 
-Note: The application is not optimized for mobile view (e.g. tablets of smarphones)
+Note: The application is not optimized for mobile view (e.g. tablets of smartphones)
 
 
 ## Available Scripts
