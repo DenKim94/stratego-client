@@ -20,8 +20,8 @@ import SetUp from './components/homeSection/SetUp';
  * Main component of the application "Stratego-Web" 
  * 
  * - Developer: D.Kim 
- * - Version: 1.1.0 
- * - Date of last changes: 29.09.2024
+ * - Version: 1.2.0 
+ * - Date of last changes: 19.10.2024
 */
 // *******************************************************************  
 const App = () => {
