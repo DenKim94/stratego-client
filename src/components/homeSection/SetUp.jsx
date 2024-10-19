@@ -4,6 +4,8 @@ import { useChatContext } from 'stream-chat-react';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
 import Button from '../gameSection/Button.jsx'
+import { Oval } from 'react-loader-spinner';
+// import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 import './CustomToastStyle.css'
 import axios from 'axios';
 import Cookies from 'universal-cookie'
@@ -34,6 +36,7 @@ const SetUp = ({ setUpProps = parameters.setUpProps}) => {
     const { gameStates, setGameStates } = useGameStates();
     const [isReadyToStart, setReadyToStart] = useState(false);
     const [userCreated, setUserCreated]     = useState(false);
+    const [isLoadingData, setIsLoadingData] = useState(false); 
     const { channelStates, setChannelStates } = useChannelStates();
     const { setItem, getItem, clearLocalStorage } = useLocalStorage();
     const navigate = useNavigate();
@@ -52,10 +55,12 @@ const SetUp = ({ setUpProps = parameters.setUpProps}) => {
 
     useEffect(() => {
         const setUserProps = async () => {
+            setIsLoadingData(true);
             try {
                 const res = await axios.post(SETUPURL, { gameStates });
                 const { userProps, token } = res.data;
-                    
+                console.log(">> Response @Client: ", res)    
+
                 cookies.set("token", token);              
                 cookies.set("userID", userProps.userID);
                 cookies.set("playerName", userProps.playerName);
@@ -74,6 +79,8 @@ const SetUp = ({ setUpProps = parameters.setUpProps}) => {
                 setTimeout(() => {
                     navigate("/");
                 }, parameters.genCfg.timeOutErrorHandling_ms);
+            } finally {
+                setIsLoadingData(false);
             }
         }
 
@@ -92,7 +99,7 @@ const SetUp = ({ setUpProps = parameters.setUpProps}) => {
         }
         
         // eslint-disable-next-line
-    },[gameStates, setReadyToStart, userCreated, setUserCreated, SETUPURL, cookies])
+    },[gameStates, userCreated, cookies])
 
     useEffect(() => {
         if (userCreated) {
@@ -211,8 +218,22 @@ const SetUp = ({ setUpProps = parameters.setUpProps}) => {
      
     return (
         <div style={setUpProps.style}>
-            
-                {channelStates.channelObj ? (   
+            {isLoadingData ? (
+                <div style={{ textAlign: 'center', marginTop: '20px', display: 'flex', flexDirection: 'column'}}>
+                    <div style={{ margin: 'auto' }}> 
+                        <Oval
+                            visible={true}
+                            height="80"
+                            width="80"
+                            color="#66cdaa"
+                            ariaLabel="oval-loading"
+                            wrapperStyle={{}}
+                            wrapperClass=""
+                        />
+                    </div>
+                    <p style={{ marginTop: '30px' }}>Waiting for server response ...</p>
+                </div>
+            ) : channelStates.channelObj ? (   
                     <WaitingRoom />
                 ) : (
                     <>
@@ -278,8 +299,8 @@ const SetUp = ({ setUpProps = parameters.setUpProps}) => {
                             </div> 
                             <ToastContainer position='top-right' className={'toast-container-setup'}/>
                         </div>
-                    </>
-                )}          
+                    </>               
+            )}
         </div> 
     );
 }
