@@ -59,8 +59,6 @@ const SetUp = ({ setUpProps = parameters.setUpProps}) => {
             try {
                 const res = await axios.post(SETUPURL, { gameStates });
                 const { userProps, token } = res.data;
-                console.log(">> Response @Client: ", res)    
-
                 cookies.set("token", token);              
                 cookies.set("userID", userProps.userID);
                 cookies.set("playerName", userProps.playerName);
