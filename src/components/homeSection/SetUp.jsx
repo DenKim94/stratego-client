@@ -40,9 +40,6 @@ const SetUp = ({ setUpProps = parameters.setUpProps}) => {
     const { setItem, getItem, clearLocalStorage } = useLocalStorage();
     const navigate = useNavigate();
 
-    // Use the url of deployed backend server or local server    
-    const SETUPURL = parameters.genCfg.SETUP_URL;
-
     // Get stored states from local storage in case of page reload                
     useEffect(() => {
         const storedUserCreated = getItem('userCreated');
@@ -56,7 +53,7 @@ const SetUp = ({ setUpProps = parameters.setUpProps}) => {
         const setUserProps = async () => {
             setIsLoadingData(true);
             try {
-                const res = await axios.post(SETUPURL, { gameStates });
+                const res = await axios.post(`${parameters.genCfg.SETUP_URL}/setup`, { gameStates });
                 const { userProps, token } = res.data;
                 cookies.set("token", token);              
                 cookies.set("userID", userProps.userID);
