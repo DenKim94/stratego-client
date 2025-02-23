@@ -53,7 +53,7 @@ const SetUp = ({ setUpProps = parameters.setUpProps}) => {
         const setUserProps = async () => {
             setIsLoadingData(true);
             try {
-                const res = await axios.post(`${parameters.genCfg.SETUP_URL}/setup`, { gameStates });
+                const res = await axios.post(`${parameters.genCfg.SERVER_URL}/setup`, { gameStates });
                 const { userProps, token } = res.data;
                 cookies.set("token", token);              
                 cookies.set("userID", userProps.userID);
